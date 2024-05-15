@@ -1,0 +1,16 @@
+services:
+  database:
+    image: postgres:latest
+    container_name: collection_app
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      - POSTGRES_DB=collectionApp
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - collection_app_database:/var/lib/postgresql/data
+
+volumes:
+  collection_app_database:
