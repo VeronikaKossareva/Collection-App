@@ -28,3 +28,4 @@ export const Account = () => {
       return <LogoutButton />; // Отображаем компонент PostForm для создания поста
   }
 };
+

@@ -1,8 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const bcrypt = require('bcrypt');
 
 async function registerUser(name, email, password) {
-  // Проверка, существует ли уже пользователь с такой электронной почтой
   const existingUser = await prisma.user.findUnique({
     where: {
       email: email,
@@ -15,12 +15,13 @@ async function registerUser(name, email, password) {
     throw error;
   }
 
-  // Создание нового пользователя, если он не найден
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   const newUser = await prisma.user.create({
     data: {
       name,
       email,
-      password,  // Важно: Пароль должен быть предварительно хэширован!
+      password: hashedPassword,  // Хэшированный пароль сохраняется в базе данных
     },
   });
 
@@ -29,21 +30,18 @@ async function registerUser(name, email, password) {
 
 async function loginUser(email, password) {
   const user = await prisma.user.findUnique({
-    where: { 
-      email: email,
-      password: password, 
-    },
+    where: { email: email },
   });
 
-  if (!user) return null; 
+  if (!user || !await bcrypt.compare(password, user.password)) {
+    return null;
+  }
 
   return user;
 }
 
 module.exports = {
   registerUser,
-  loginUser, 
-  prisma,  // Экспорт экземпляра для возможного использования в других частях приложения
+  loginUser,
+  prisma,
 };
-
-

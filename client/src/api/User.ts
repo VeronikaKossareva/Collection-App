@@ -5,10 +5,9 @@ import { LogoutButton } from '../components/LogoutButton';
 // Определяем схему данных пользователя
 export const UserSchema = z.object({
   id: z.string(), // ID пользователя (строка)
-  email: z.string(),
+  email: z.string().email(),
   name: z.string(), // Имя пользователя (строка)
 })
-
 
 // Тип данных пользователя, получаемый из схемы UserSchema
 export type User = z.infer<typeof UserSchema>;
@@ -61,17 +60,34 @@ export function login(email: string, password: string, ): Promise<void> {
     });
 }
 
+
 // export function logoutUser(): Promise:<void> {
 
 // }
 
 // Функция для получения данных текущего пользователя
+// export function fetchMe(): Promise<User> {
+//   return fetch("/api/users/me") // Отправляем GET-запрос на сервер для получения данных текущего пользователя
+//     // .then(validateResponse) // Проверяем ответ на валидность
+//     .then(response => response.json()) // Преобразуем ответ в формат JSON
+//     .then((data) => UserSchema.parse(data)); // Проверяем полученные данные по схеме UserSchema
+// }
+
 export function fetchMe(): Promise<User> {
-  return fetch("/api/users/me") // Отправляем GET-запрос на сервер для получения данных текущего пользователя
-    // .then(validateResponse) // Проверяем ответ на валидность
-    .then(response => response.json()) // Преобразуем ответ в формат JSON
+  const token = localStorage.getItem('token');
+
+  return fetch('/api/users/me', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then((data) => UserSchema.parse(data)); // Проверяем полученные данные по схеме UserSchema
 }
-
-
-
