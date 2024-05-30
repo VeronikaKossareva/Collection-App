@@ -1,7 +1,5 @@
 import { FC, MouseEventHandler } from 'react';
-
 import { Loader } from '../Loader';
-import './Button.css';
 
 export interface IButtonProps {
   title: string;

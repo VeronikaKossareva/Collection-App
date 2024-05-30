@@ -1,7 +1,5 @@
 import { FC, ReactNode } from 'react';
 
-import './SegmentedSwitch.css';
-
 export interface ISegmentedSwitchProps {
   children: ReactNode;
 }

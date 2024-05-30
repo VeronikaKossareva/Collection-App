@@ -1,31 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchMe } from "../../api/User"; // Импортируем функцию fetchMe для получения данных текущего пользователя
-import { Loader } from "../Loader"; // Импортируем компонент Loader для отображения загрузки
-import { AuthForm } from "../AuthForm"; // Импортируем компонент AuthForm для отображения формы аутентификации
-import { queryClient } from "../../api/queryClient"; // Импортируем экземпляр queryClient для управления состоянием кэша запросов
+import { fetchMe } from "../../api/User";
+import { Loader } from "../Loader";
+import { AuthForm } from "../AuthForm";
+import { queryClient } from "../../api/queryClient";
 import { LogoutButton } from "../LogoutButton";
 
-// Компонент Account для отображения содержимого аккаунта пользователя
 export const Account = () => {
-  // Используем хук useQuery для выполнения запроса на получение данных текущего пользователя
   const meQuery = useQuery(
     {
-      queryFn: () => fetchMe(), // Функция для выполнения запроса
-      queryKey: ['users', 'me'], // Ключ запроса
+      queryFn: () => fetchMe(),
+      queryKey: ['users', 'me'],
     },
-    queryClient // Передаем экземпляр queryClient для управления кэшем запросов
+    queryClient
   );
 
-  // В зависимости от состояния запроса, возвращаем соответствующий компонент
   switch (meQuery.status) {
-    case "pending": // Если запрос находится в состоянии ожидания
-      return <Loader />; // Отображаем компонент Loader
+    case "pending":
+      return <Loader />;
 
-    case "error": // Если запрос завершился с ошибкой
-      return <AuthForm />; // Отображаем компонент AuthForm для аутентификации
+    case "error":
+      return <AuthForm />;
 
-    case "success": // Если запрос завершился успешно
-      return <LogoutButton />; // Отображаем компонент PostForm для создания поста
+    case "success":
+      return <LogoutButton />;
   }
 };
-

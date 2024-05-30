@@ -1,7 +1,5 @@
 import { FC, MouseEventHandler } from 'react';
 
-import './SegmentedSwitchOption.css';
-
 export interface ISegmentedSwitchOptionProps {
   isActive: boolean;
   title: string;

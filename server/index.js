@@ -7,6 +7,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const app = express();
 const port = 3001;
+const path = require('path');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -75,6 +76,11 @@ app.get('/users/me', authenticateToken, async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error fetching user', error: error.message });
   }
+});
+
+app.use(express.static(path.join(__dirname, '../client/dist')));
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
 app.listen(port, () => {

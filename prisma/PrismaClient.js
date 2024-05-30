@@ -21,7 +21,7 @@ async function registerUser(name, email, password) {
     data: {
       name,
       email,
-      password: hashedPassword,  // Хэшированный пароль сохраняется в базе данных
+      password: hashedPassword,
     },
   });
 

@@ -7,7 +7,7 @@ const Dropzone: React.FC = () => {
   return (
     <div {...getRootProps()}>
       <input {...getInputProps()} />
-      <p>Перетащите сюда файлы или кликните, чтобы выбрать файлы для загрузки.</p>
+      <p></p>
     </div>
   );
 };
